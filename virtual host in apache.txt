@@ -1,0 +1,65 @@
+Step 1 — Creating the Directory Structure
+sudo mkdir -p /var/www/your_domain_1/public_html
+sudo mkdir -p /var/www/your_domain_2/public_html
+
+
+Step 2 — Granting Permissions
+sudo chown -R $USER:$USER /var/www/your_domain_1/public_html
+sudo chown -R $USER:$USER /var/www/your_domain_2/public_html
+sudo chmod -R 755 /var/www
+
+
+Step 3 — Creating Default Pages for Each Virtual Host
+nano /var/www/your_domain_1/public_html/index.html
+
+cp /var/www/your_domain_1/public_html/index.html /var/www/your_domain_2/public_html/index.html
+nano /var/www/your_domain_2/public_html/index.html
+
+
+Step 4 — Creating New Virtual Host Files
+sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/your_domain_1.conf
+sudo nano /etc/apache2/sites-available/your_domain_1.conf
+<VirtualHost *:80>
+  ...
+    ServerAdmin admin@your_domain_1
+    ServerName your_domain_1
+    ServerAlias www.your_domain_1
+    DocumentRoot /var/www/your_domain_1/public_html
+    ...
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ...
+</VirtualHost>
+sudo cp /etc/apache2/sites-available/your_domain_1.conf /etc/apache2/sites-available/your_domain_2.conf
+sudo nano /etc/apache2/sites-available/your_domain_2.conf
+<VirtualHost *:80>
+  ...
+    ServerAdmin admin@your_domain_2
+    ServerName your_domain_2
+    ServerAlias www.your_domain_2
+    DocumentRoot /var/www/your_domain_2/public_html
+    ...
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ...
+</VirtualHost>
+sudo a2ensite your_domain_1.conf
+sudo a2ensite your_domain_2.conf
+sudo apache2ctl configtest
+Output
+. . .
+Syntax OK
+sudo systemctl restart apache2
+sudo systemctl status apache2
+
+
+
+Step 6 — (Optional) Setting Up Local Hosts File
+sudo nano /etc/hosts
+127.0.0.1   localhost
+127.0.1.1   guest-desktop
+your_server_IP your_domain_1
+your_server_IP your_domain_2
+
+
+

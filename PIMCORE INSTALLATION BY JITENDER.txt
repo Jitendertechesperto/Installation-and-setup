@@ -1,0 +1,111 @@
+------------------------------------------------------PIMCORE INSTALLATION SETUP ON LINUX--------------------------------------------------------------------
+  
+1) sudo apt update
+
+2) sudo apt upgrade	
+
+3) sudo apt install software-properties-common    (Then install a package needed to add the repository where we will install PHP 8)
+
+4) sudo add-apt-repository ppa:ondrej/php         (Add the PHP 8 repository)
+    Press = Enter 
+
+5) sudo apt install apache2 mariadb-server php8.0 libapache2-mod-php8.0 php8.0-mysql php8.0-curl php8.0-xml php8.0-zip php8.0-mbstring php8.0-intl php8.0-opcache php8.0-imagick php8.0-gd php8.0-cli php8.0-fpm libapache2-mod-fcgid
+   (This should be complete without any error and please check below screenshot for reference. 
+    If it not match need to check your internet connection or space issue.)
+
+6) Configure php for pimcore (When the installation is finished, we have to configure PHP parameter for Pimcore. Open the PHP-fpm configuration file.)
+  sudo vi /etc/php/8.0/fpm/php.ini
+
+7) Modify these parameters as shown below :
+    memory_limit = 256M
+    upload_max_filesize = 100M
+    post_max_size = 100M
+
+8) save it and exit
+
+9) sudo a2enmod proxy_fcgi setenvif    (Enable module of PHP Then, enable the necessary modules and the new PHP-fpm configuration.)
+
+10) sudo a2enconf php8.0-fpm            
+
+11) sudo systemctl restart apache2
+
+12) Create a new database and user for PIMcore
+    After you have run the mysql_secure_installation script to set the root password and secure the installation,
+    you will need to create a new database and user for PIMCore.
+
+13) $ sudo systemctl enable mysql
+    $ sudo mysql_secure_installation
+
+14) $ sudo systemctl enable mysql
+    $ sudo mysql_secure_installation
+
+15) $ sudo mysql -u root -p
+
+16) CREATE DATABASE pimcoredb charset=utf8mb4;  (Create the new database with the name of your choice. we are using pimcoredb)
+
+17) CREATE USER 'user'@'localhost' IDENTIFIED BY 'pss';   (Then, create the new user along with its password. It should be a strong password and not the one I have assigned . It is only for article purpose. user = user , password = pss)
+
+18) GRANT ALL ON pimcoredb.* TO 'user'@'localhost' WITH GRANT OPTION;     (Give this new user permissions on the new database.)
+
+19) FLUSH PRIVILEGES;
+exit;
+
+20) Install Composer
+
+21) To install PIMCore we need to configure Composer on the system. So let’s go for it.
+    Make sure you have wget,zip curl,git packages installed.
+
+22) $ sudo apt install curl git unzip wget
+
+23) $ sudo curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer   (Now download and install Composer by running below command:)
+
+24) cd /var/www/
+
+25) sudo composer create-project pimcore/skeleton pimcore (Now install PIMcore using composer)
+
+26) Should complete without error.
+
+27) a new folder must be created by pimcore 
+
+28) $ cd /var/www/pimcore
+$ ls    (After the process is finished, go to the folder that has been generated.)
+
+29) $ sudo ./vendor/bin/pimcore-install    (And now run the script to complete the configuration parameters.) 
+
+30) During the execution of the above command, you will have to create the admin user along with the previously defined database parameters. Note down this admin and password will required to login to dashboard.
+
+31) Please check there should be no error after installation .After this, the installation is complete.
+
+32) Configure Apache for PIMcore
+
+33) $ sudo chown www-data:www-data -R /var/www/pimcore/
+$ sudo chmod -R 755 /var/www/pimcore/
+
+34) sudo vi /etc/apache2/sites-available/pimcore.conf   (Create a new virtual host for PIMCore)
+
+35) <VirtualHost *:80>
+    ServerAdmin admin@example.com
+    DocumentRoot /var/www/pimcore/public
+    ServerName example.com
+
+     <Directory /var/www/pimcore/public/>
+          Options FollowSymlinks
+          AllowOverride All
+          Require all granted
+     </Directory>
+     ErrorLog ${APACHE_LOG_DIR}/error.log
+     CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+36) apachectl -t
+
+37) $ sudo a2enmod rewrite
+$ sudo a2ensite pimcore.conf
+$ sudo systemctl restart apache2
+
+38) after all these things it might be possible that the pimcore is unable to access that is because of unstarted modules of php,
+ we have to enable every possible module. 
+
+39) sudo a2query -m php8.0
+
+40) sudo apt install libapache2-mod-php8.0

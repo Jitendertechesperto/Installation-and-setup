@@ -1,0 +1,52 @@
+------------------------------------------------------------------------------How to create ftp user with specific directory access on Ubuntu Server On AWS----------------------------------------------------------------------------------
+
+Step 1 : Creating an ubuntu instance on AWS first, while creating an instance make sure you the security group should be like this :
+
+     A) *Type                      Protocol              Port range              custom
+         SSH                         TCP                     22                  0.0.0.0
+
+   
+     B) *Type                      Protocol              Port range              Anywhere
+         HTTP                        TCP                     80                  it will automatically set
+
+     
+     C) *Type                      Protocol              Port range              Anywhere
+         HTTPS                       TCP                     443                 it will automatically set 
+
+     
+     D) *Type                      Protocol              Port range              Anywhere
+         Custom TCP                  TCP                    20-21                it will automatically set
+
+    
+     E) *Type                      Protocol              Port range              Anywhere
+         Custom TCP                  TCP                 1024-1048               SAME AS EARLIER
+
+
+
+Step 2 : Now when the aws instance successfully configured with a required security group have an ssh from putty software where we can easily excess the server.
+Step 3 : sudo apt update 
+Step 4 : Sudo apt install apache2 
+Step 5 : Service apache2 start
+Step 6 : Sudo apt install vsftpd
+step 7 : nano /etc/vsftpd.conf
+step 8 : anonymous enable should be NO 
+Step 9 : uncomment the line write enable yes 
+Step 10 : uncomment the line chroot local user yes 
+Step 11 : add this line just below the chroot user line (allow_writeable_chroot=YES)
+Step 12 : Go to the bottom of the file and just write these lines :
+pasv_enable=YES
+pasv_min_port=1024
+pasv_max_port=1048
+pasv_address=13.233.184.230
+Step 13 : service vsftpd restart 
+Step 14 : Now we will make some user having a sepecific directory access only for exampke i am gonna take the example of salman and mansi
+step 15 : adduser salman and adduser mansi
+Step 16 : sudo usermod -d /var/www/rgroup -m mansi
+Step 17 : sudo chmod -R 777 /var/www/rgroup
+Step 18 : chown -R mansi:www-data /var/www/rgroup  (jo project hai vo root pay tha usse user pay kardiya)
+Step 19 : next we will do same configuration fro salman also 
+Step 20 : sudo usermod -d /var/www/chipss.tactionclients.com
+Step 21 : sudo chmod -R 777 /var/www/chipss.tactionclients.com
+Step 22 : chown -R salman:www-data /var/www/cipss.tactionclients.com
+Step 23 : serivce apache2 restart
+Step 24 : Go to filezilla and now you can easily check by giving yourhost as an server public IP and username as salman/mansi and password and then just quickconnect.

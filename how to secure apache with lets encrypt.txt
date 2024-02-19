@@ -1,0 +1,104 @@
+-----------How To Secure Apache with Let's Encrypt on Ubuntu 22.04------------
+
+Step 1 — Installing Certbot
+  
+   sudo apt update
+   sudo apt install certbot python3-certbot-apache
+   (You will be prompted to confirm the installation by pressing Y, then ENTER)
+   
+
+
+Step 2 — Checking your Apache Virtual Host Configuration
+
+   sudo nano /etc/apache2/sites-available/your_domain.conf
+          (ServerName your_domain)
+          (ServerAlias www.your_domain)
+   sudo apache2ctl configtest
+   sudo systemctl reload apache2
+
+
+
+Step 3 — Allowing HTTPS Through the Firewall
+
+   sudo ufw status
+
+    Output
+Status: active
+
+To                         Action      From
+--                         ------      ----
+OpenSSH                    ALLOW       Anywhere                  
+Apache                     ALLOW       Anywhere             
+OpenSSH (v6)               ALLOW       Anywhere (v6)             
+Apache (v6)                ALLOW       Anywhere (v6)
+
+sudo ufw allow 'Apache Full'
+sudo ufw delete allow 'Apache'
+sudo ufw status
+
+Output
+Status: active
+
+To                         Action      From
+--                         ------      ----
+OpenSSH                    ALLOW       Anywhere                  
+Apache Full                ALLOW       Anywhere                  
+OpenSSH (v6)               ALLOW       Anywhere (v6)             
+Apache Full (v6)           ALLOW       Anywhere (v6)        
+
+
+
+
+
+Step 4 — Obtaining an SSL Certificate
+
+    sudo certbot --apache
+
+Output
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Enter email address (used for urgent renewal and security notices)
+ (Enter 'c' to cancel): you@your_domain
+
+
+Please read the Terms of Service at
+https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf. You must
+agree in order to register with the ACME server at
+https://acme-v02.api.letsencrypt.org/directory
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+(Y)es/(N)o: Y
+
+
+Would you be willing to share your email address with the Electronic Frontier
+Foundation, a founding partner of the Let's Encrypt project and the non-profit
+organization that develops Certbot? We'd like to send you email about our work
+encrypting the web, EFF news, campaigns, and ways to support digital freedom.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+(Y)es/(N)o: N
+
+
+Which names would you like to activate HTTPS for?
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+1: your_domain
+2: www.your_domain
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Select the appropriate numbers separated by commas and/or spaces, or leave input
+blank to select all options shown (Enter 'c' to cancel): 
+
+
+Successfully received certificate.
+Certificate is saved at: /etc/letsencrypt/live/your_domain/fullchain.pem
+Key is saved at:         /etc/letsencrypt/live/your_domain/privkey.pem
+This certificate expires on 2022-07-10.
+These files will be updated when the certificate renews.
+Certbot has set up a scheduled task to automatically renew this certificate in the background.
+
+Deploying certificate
+Successfully deployed certificate for your_domain to /etc/apache2/sites-available/your_domain-le-ssl.conf
+Successfully deployed certificate for www.your_domain.com to /etc/apache2/sites-available/your_domain-le-ssl.conf
+Congratulations! You have successfully enabled HTTPS on https:/your_domain and https://www.your_domain.com
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+If you like Certbot, please consider supporting our work by:
+ * Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+ * Donating to EFF:                    https://eff.org/donate-le
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

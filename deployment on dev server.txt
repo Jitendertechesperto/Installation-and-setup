@@ -1,0 +1,33 @@
+--------------------------------------------------------------------------DEPLOYMENT ON DEV SERVER-----------------------------------------------------------------------
+
+ A) chipss.tactionclients.com
+    step 1 - Developer will send a build in zip format
+    step 2 - Unzip the build 
+    step 3 - We can unzip the build on local machine or we can just simply drag and drop the zip file to any blank folder of dev server and unzip the build zip file there by cmd - (unzip build.zip)
+    step 4 - Go to dev server through putty software   
+    step 5 - switch to superuser cmd (sudo su)
+    step 6 - pm2 restart all
+    step 7 - Go to that blank folder 
+    step 7 - Rename to build file to chipss.tactionclients.com by cmd (mv build chipss.tactionclients.com)
+    step 8 - Now we have to remove the chipss.tactionclients.com from /var/www/ by cmd (rm -rf /var/www/chipss.tactionclients.com)    
+    step 9 - move this renamed build into /var/www/ by cmd (mv chipss.tactionclients.com /var/www/)
+    step 10 - Give Read,Write and execute permission to that folder by cmd (chmod 0777 -R /var/www/chipss.tactionclients.com)
+    step 11 - Cmd (pm2 restart all)
+ 
+
+ B) Rgroup
+   step 1 - Developer will send file like server.js file, etc and he/she will confirm that where to move the file and overwrite it there by drag and drop.
+   step 2 - If the file is of frontend, move the file into frontend by filezilla drag and drop.
+   step 3 - Go to server by putty and restart pm2 (pm2 restart all)
+   step 4 - If the file is of backend, move the file into backend folder by filezilla drag and drop.
+   step 5 - Go to server by putty and restart pm2 (pm2 restart all)
+   step 6 - same for mirthapi
+   
+
+ C) Pepstep (No idea about pepstep but i think similar deployment like rgroup)
+   step 1 - Developer will send file like server.js file, etc and he/she will confirm that where to move the file and overwrite it there by drag and drop.
+   step 2 - If the file is of frontend, move the file into frontend by filezilla drag and drop.
+   step 3 - Go to server by putty and restart pm2 (pm2 restart all)
+   step 4 - If the file is of backend, move the file into backend folder by filezilla drag and drop.
+   step 5 - Go to server by putty and restart pm2 (pm2 restart all)
+   step 6 - same for pepstepapi

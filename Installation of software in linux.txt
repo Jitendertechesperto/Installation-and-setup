@@ -1,0 +1,54 @@
+There are 5 ways for installing software in linux
+
+1) Package Manager (APT)
+  a)sudo apt insatll 'software name'
+   
+  b)Before download we should search the software name so that we can 
+   confirm that its available in our repo or not.
+   apt search 'software name'
+   sudo apt install 'software name'
+  
+  c)sudo apt remove 'software name'
+
+
+
+
+
+2) Snap Store
+  a)sudo apt install snapd
+
+  b)snap search spotify   (to search the correct name of software)
+  
+  c)sudo snap install spotify
+
+
+
+
+
+3) Flatpaks (same as snap store)
+  a)sudo apt install flatpak
+ 
+  b)flatpak search vlc    (to search the correct name of flatpak)
+ 
+  c)sudo flatpak install vlc(after that it will ask for which one choose by type 1 or 2 or 3)
+ 
+
+
+
+
+4) .deb files 
+   a)go to chrome and download the software by searching softwarename for linux
+   after that download it,it will be downloaded in .deb(software.deb)
+    
+   b)go to terminal 
+     cd Downloads
+     sudo dpkg -i softwarename
+
+
+
+
+5) .appimage
+   a)same as .deb file (we can download it by git)
+   b)go to file manager in download it will show the software their right click on software give permission
+      of execute 
+   c)double click on software it will directly run 

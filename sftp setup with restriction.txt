@@ -1,0 +1,55 @@
+---------------------------------------Restrict User SFTP Access-----------------------------------
+sudo apt install openssh-server
+First we will make a group for sftp in which we will add those user who want to access only provided directory
+
+Sudo groupadd groupname
+
+sudo useradd -g groupname -s /bin/false -m -d /home/username username 
+  (in this command we are making a user and adding this user in the group )
+  (-g is for adding in group, -s for restriction in binary, -m for creating a dir, -d for specify a dir for the installation process)
+
+sudo passwd username  (assigning password to user)
+
+exceptional - sudo usermod -G sftp -s /bin/false /username 
+ (this command is for if, the user is already exist and we just have to add that user in the group)
+
+sudo chown root: /home/username (change home dir ownership from user to root)
+sudo chmod 755 /home/username (change home dir permission)
+
+sudo mkdir /home/username/{public-html,uploads}
+(so this is the kind of exceptional because public html and upload are those folder in which we are giving access to useronly)
+(here we are making 2 folder in if its already exist we dont have to make it)
+(we use curly brasis beacuse the folder is more than 1 other wise normal brasis will be used)
+
+sudo chmod 755 /home/username/{public-html,uploads}
+
+sudo chown username:groupname /home/username/{public-html,uploads} 
+(this command is for giving access tp user who is the group both the folder)
+
+sudo nano /etc/ssh/sshd_config
+find this line (subsystem sftp  /user/lib/openssh/sftp-server)
+(after finding this line add this line)  
+match group sftp                  (Group name which we are looking for restriction)
+ChrootDirectory %h                (access should be at home)
+ForceCommand internal-sftp        
+AllowTcpForwardingg no
+XLLForwarding no
+                 ctrl plus x 
+                    yes
+sudo systemctl restart ssh
+ifconfig (ip identify)
+go to file zilla
+
+                                         
+
+
+
+
+
+
+
+
+
+
+
+																								)

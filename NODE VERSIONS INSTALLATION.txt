@@ -1,0 +1,53 @@
+  You can use a version manager to easily switch between different versions of Node.js. One popular version manager for Node.js is NVM (Node Version Manager). Here are the steps to install NVM and manage multiple Node.js versions:
+
+ ( A ) Install NVM:
+  1)Open a terminal window.
+
+  2)Run the following command to install NVM:
+
+ cmd ~ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+ This command downloads and executes the NVM installation script. Ensure that you have curl installed on your system.
+
+  3)Close and reopen your terminal or run the command:
+ cmd ~ source ~/.bashrc
+ *If you're using zsh, you might need to run:
+ cmd ~ source ~/.zshrc
+
+ ( B ) Install Node.js Versions:
+  After installing NVM, you can install different versions of Node.js.
+
+   To install a specific version (e.g., Node.js 14.17.0), use the following command:
+
+
+nvm install 14.17.0
+To install another version (e.g., Node.js 12.22.1), use:
+
+
+  nvm install 12.22.1
+ ( C ) Switch Between Node.js Versions:
+  To switch between installed Node.js versions, use the following command:
+
+   nvm use <version_number>
+   For example, to switch to Node.js 14.17.0:
+ nvm use 14.17.0
+This command sets the currently active Node.js version for your shell session.
+
+You can check the currently active Node.js version with:
+
+ node -v
+  ( D ) Set Default Node.js Version:
+ To set a default Node.js version, use the following command:
+
+  nvm alias default <version_number>
+ For example, to set Node.js 14.17.0 as the default:
+
+ nvm alias default 14.17.0
+  This ensures that the specified version is used by default when you open a new terminal.
+
+  With NVM, you can easily manage different Node.js versions across your projects. Remember to switch to the appropriate version for each project based on its requirements.
+  
+
+
+
+
+

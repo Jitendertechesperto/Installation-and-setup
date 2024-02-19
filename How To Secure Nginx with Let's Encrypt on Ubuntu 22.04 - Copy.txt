@@ -1,0 +1,57 @@
+How To Secure Nginx with Let's Encrypt on Ubuntu 22.04
+
+-----------------------Step 1 — Installing Certbot-------------------------------
+
+sudo snap install core; sudo snap refresh core
+sudo apt remove certbot
+sudo snap install --classic certbot
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+
+
+-----------------------Step 2 — Confirming Nginx’s Configuration-----------------------
+
+sudo nano /etc/nginx/sites-available/example.com
+
+...
+server_name example.com www.example.com;
+...
+
+sudo nginx -t
+sudo systemctl reload nginx
+
+------------------------Step 3 — Allowing HTTPS Through the Firewall-----------------------
+
+sudo ufw status
+
+Output
+Status: active
+
+To                         Action      From
+--                         ------      ----
+OpenSSH                    ALLOW       Anywhere                  
+Nginx HTTP                 ALLOW       Anywhere                  
+OpenSSH (v6)               ALLOW       Anywhere (v6)             
+Nginx HTTP (v6)            ALLOW       Anywhere (v6)
+
+sudo ufw allow 'Nginx Full'
+sudo ufw delete allow 'Nginx HTTP'
+
+
+
+---------------------------Step 4 — Obtaining an SSL Certificate------------------------------
+
+sudo certbot --nginx -d example.com -d www.example.com
+
+Output
+IMPORTANT NOTES:
+Successfully received certificate.
+Certificate is saved at: /etc/letsencrypt/live/your_domain/fullchain.pem
+Key is saved at: /etc/letsencrypt/live/your_domain/privkey.pem
+This certificate expires on 2022-06-01.
+These files will be updated when the certificate renews.
+Certbot has set up a scheduled task to automatically renew this certificate in the background.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+If you like Certbot, please consider supporting our work by:
+* Donating to ISRG / Let's Encrypt: https://letsencrypt.org/donate
+* Donating to EFF: https://eff.org/donate-le
